@@ -1,0 +1,15 @@
+<h1 id="tableLabel">Portfolio Uploader</h1>
+
+<input type="file" class="form-control" (change)="addfile($event)" placeholder="Upload file" accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">  
+
+<div class="row" *ngFor="let header of headers">
+    <div class="col"> 
+      {{header.key}}
+    </div>
+    <div class="col"> 
+      <select (change)="EnsureNonDuplicateFieldNames($event, header)">
+        <option>Select a Field</option>
+        <option *ngFor="let fieldOption of fieldNames">{{fieldOption.id}}</option>
+      </select>
+    </div>
+  </div>
