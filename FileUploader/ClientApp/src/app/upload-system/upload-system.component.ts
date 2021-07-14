@@ -78,12 +78,13 @@ export class UploadSystemComponent {
   }
 
   SubmitToController(){
-
+    
   
   }
-  
+
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     http.get<FieldName[]>(baseUrl + 'FileUploader').subscribe(result => {
+      debugger;
       this.fieldNames = result.map(x=> { return ({id: x.name, propertyType: x.propertyType, value: false})});
     }, error => console.error(error));
   }

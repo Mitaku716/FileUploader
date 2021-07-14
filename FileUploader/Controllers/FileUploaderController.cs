@@ -34,10 +34,10 @@ namespace FileUploader.Controllers
             };
         }
 
-        [HttpPost]
-        public IActionResult Post([FromForm] IFormFile excelFile)
-        {
+        // [HttpPost]
+        // public IActionResult Post([FromForm] IFormFile excelFile)
+        // {
            
-        }
+        // }
     }
 }
