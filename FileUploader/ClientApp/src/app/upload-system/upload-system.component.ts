@@ -16,6 +16,7 @@ export class UploadSystemComponent {
   headers: any[];
   fieldNames: any;
   oldValue: any;
+  httpClient: HttpClient;
 
   addfile(event)     
   {  
@@ -38,19 +39,27 @@ export class UploadSystemComponent {
   }
 
    EnsureNonDuplicateFieldNames(fieldName, index){
-     if(this.headers[index].duplicated){
-       
-     }
-
-     //if headers already has a fieldName in use
-     var searchIndex = _.findIndex(this.headers, function(o){ return o.fieldName == fieldName; })
-     //if it doesnt then set the fieldName to the newly chosen field
-     if(searchIndex == -1){
-      this.headers[index].duplicated = true;
-      this.headers[searchIndex].duplicated = true;
+      var client = this;
+      if(this.headers[index].duplicated){
+       this.headers[index].duplicated = false;
+       if(fieldName == "Select a Field"){
+         return;
+       }
+       var duplicates = _.filter(this.headers, function(o){ return (o.fieldName == client.headers[index].fieldName && o.duplicated == true); });
+       if(duplicates.length == 1){
+        this.headers[_.findIndex(this.headers, function(o){return (o.fieldName == client.headers[index].fieldName && o.duplicated == true)})].duplicated = false;
+       }
      }
      this.headers[index].fieldName = fieldName;
-
+     if(fieldName == "Select a Field"){
+      return;
+    }
+     var itemsWithFieldName = _.filter(client.headers, function(o){return (o.fieldName == client.headers[index].fieldName)});
+     if(itemsWithFieldName.length > 1){
+       for(var i = 0; i < itemsWithFieldName.length; i++){
+         client.headers[_.findIndex(client.headers, itemsWithFieldName[i])].duplicated = true;
+       }
+     }
    }
 
   ProcessHeaders(elements){
@@ -66,22 +75,22 @@ export class UploadSystemComponent {
         duplicated: false
       })
     }
-    debugger;  
-
   }
 
-  // DuplicateEntry(){
+  SubmitToController(){
+    
+  
+  }
 
-  // }
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-    http.get<string[]>(baseUrl + 'FileUploader').subscribe(result => {
-      this.fieldNames = result.map(x=> { return ({id: x, value: false})});
+    http.get<FieldName[]>(baseUrl + 'FileUploader').subscribe(result => {
+      debugger;
+      this.fieldNames = result.map(x=> { return ({id: x.name, propertyType: x.propertyType, value: false})});
     }, error => console.error(error));
   }
 }
 
-interface Document {
-  date: string;
-  portfolio: string;
-  data: any;
+interface FieldName {
+  propertyType: string;
+  name: string;
 }

@@ -16,9 +16,28 @@ namespace FileUploader.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<FieldName> Get()
         {
-            return new string[]{"Date Of Birth", "Original Account Number"};
+            return new FieldName[]{
+                new FieldName{
+                    Name ="Date Of Birth",
+                    PropertyType = "DateTime"
+                },
+                new FieldName{ 
+                    Name = "Original Account Number",
+                    PropertyType = "String"
+                },
+                new FieldName{ 
+                    Name = "Original Balance",
+                    PropertyType = "decimal"
+                }
+            };
         }
+
+        // [HttpPost]
+        // public IActionResult Post([FromForm] IFormFile excelFile)
+        // {
+           
+        // }
     }
 }
