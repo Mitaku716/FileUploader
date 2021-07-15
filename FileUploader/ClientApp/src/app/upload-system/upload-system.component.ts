@@ -13,10 +13,29 @@ declare var _:any;
 export class UploadSystemComponent {
   file: File;
   arrayBuffer: any;
-  headers: any[];
+  headers: HeaderData[];
   fieldNames: any;
   oldValue: any;
   httpClient: HttpClient;
+  fileUploadComplete: boolean;
+  baseUrl: string;
+
+  SubmitToController() {
+
+    const formData = new FormData();
+    formData.append('excelFile', this.file);
+    formData.append('headerData', JSON.stringify(this.headers));
+
+    this.httpClient.post<any>(this.baseUrl + "FileUploader/Post", formData).subscribe(response => {
+        console.log(response);
+        if (response.statusCode === 200) {
+          // Reset the file input
+          this.fileUploadComplete = true;
+        }
+      }, error => {
+        console.log(error);
+      });
+  }
 
   addfile(event)     
   {  
@@ -69,20 +88,14 @@ export class UploadSystemComponent {
     var headerList = Object.keys(elements[0]);
     this.headers = [];
     for(var i = 0; i < headerList.length; i++){
-      this.headers.push({
-        key: headerList[i],
-        fieldName: null,
-        duplicated: false
-      })
+      this.headers.push(new HeaderData(headerList[i],null,false))
     }
   }
 
-  SubmitToController(){
-    
-  
-  }
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
+    this.baseUrl = baseUrl;
+    this.httpClient = http;
     http.get<FieldName[]>(baseUrl + 'FileUploader').subscribe(result => {
       debugger;
       this.fieldNames = result.map(x=> { return ({id: x.name, propertyType: x.propertyType, value: false})});
@@ -93,4 +106,14 @@ export class UploadSystemComponent {
 interface FieldName {
   propertyType: string;
   name: string;
+}
+class HeaderData {
+  constructor(key: string, fieldName: string, duplicated: boolean) {
+    this.key = key;
+    this.fieldName = fieldName;
+    this.duplicated = duplicated;
+  }
+  key: string;
+  fieldName: string;
+  duplicated: boolean;
 }

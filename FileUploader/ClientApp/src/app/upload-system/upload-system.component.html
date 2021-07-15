@@ -15,4 +15,4 @@
     </div>
   </div>
 
-  <button (click)="SubmitToController">Submit</button>
+  <button *ngIf="file" (click)="SubmitToController()">Submit</button>

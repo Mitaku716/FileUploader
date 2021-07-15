@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace FileUploader.Controllers
 {
@@ -34,10 +38,23 @@ namespace FileUploader.Controllers
             };
         }
 
-        // [HttpPost]
-        // public IActionResult Post([FromForm] IFormFile excelFile)
-        // {
-           
-        // }
+        [HttpPost]
+        [Route("Post")]
+        public IActionResult Post([FromForm] IFormFile excelFile,[FromForm] string headerData)
+        {
+            var convertedHeaderData = JsonConvert.DeserializeObject<List<SomeClass>>(headerData);
+
+
+
+            var x = 1;
+            return Ok();
+        }
     }
+    public class SomeClass
+    {
+        public string key { get; set; }
+        public string fieldName { get; set; }
+        public bool duplicated { get; set; }
+      }
 }
+
