@@ -22,9 +22,9 @@ export class UploadSystemComponent {
 
   SubmitToController() {
 
-    const formData = new FormData();
-    formData.append('excelFile', this.file);
-    formData.append('headerData', JSON.stringify(this.headers));
+     const formData = new FormData();
+     formData.append('excelFile', this.file);
+     formData.append('headerData', JSON.stringify(this.headers));
 
     this.httpClient.post<any>(this.baseUrl + "FileUploader/Post", formData).subscribe(response => {
         console.log(response);
@@ -87,8 +87,8 @@ export class UploadSystemComponent {
     }
     var headerList = Object.keys(elements[0]);
     this.headers = [];
-    for(var i = 0; i < headerList.length; i++){
-      this.headers.push(new HeaderData(headerList[i],null,false))
+    for(var i = 0; i < headerList.length; i++) {
+      this.headers.push(new HeaderData(headerList[i], null, false));
     }
   }
 
